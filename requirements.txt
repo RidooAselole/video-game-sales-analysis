@@ -1,0 +1,14 @@
+# Versi scikit-learn sesuai yang dipakai pada artikel.
+scikit-learn==1.9.0
+pandas
+numpy
+scipy
+matplotlib
+seaborn
+streamlit
+plotly
+sqlalchemy
+pymysql
+jupyter
+# Opsional: kunci versi lainnya dengan menjalankan `pip freeze` di komputer Anda,
+# lalu salin baris untuk paket di atas ke berkas ini.

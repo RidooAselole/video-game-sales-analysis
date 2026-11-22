@@ -1,0 +1,107 @@
+
+==============================================================================
+RQ1 -- Pola penjualan genre & platform: NA vs EU vs JP
+==============================================================================
+  Total (juta): NA=4,392.95, EU=2,434.13, JP=1,291.02, Other=797.75
+  Pangsa dari 4 wilayah (%): NA=49.27, EU=27.3, JP=14.48, Other=8.95
+  Pangsa dari NA+EU+JP (%) : NA=54.11, EU=29.98, JP=15.9
+
+  Korelasi Spearman antar wilayah (per record):
+          NA_Sales  EU_Sales  JP_Sales
+    NA_Sales     1.000     0.681    -0.229
+    EU_Sales     0.681     1.000    -0.177
+    JP_Sales    -0.229    -0.177     1.000
+
+  Genre: jarak Jensen-Shannon (basis 2; 0=identik, 1=beda total): NA-EU=0.050, NA-JP=0.301, EU-JP=0.309
+    top-3 Genre di NA: Action (20.0%); Sports (15.6%); Shooter (13.3%)
+    top-3 Genre di EU: Action (21.6%); Sports (15.5%); Shooter (12.9%)
+    top-3 Genre di JP: Role-Playing (27.3%); Action (12.4%); Sports (10.5%)
+
+  Platform: jarak Jensen-Shannon (basis 2; 0=identik, 1=beda total): NA-EU=0.184, NA-JP=0.434, EU-JP=0.463
+    top-3 Platform di NA: X360 (13.7%); PS2 (13.3%); Wii (11.6%)
+    top-3 Platform di EU: PS3 (14.1%); PS2 (13.9%); X360 (11.5%)
+    top-3 Platform di JP: DS (13.6%); PS (10.8%); PS2 (10.8%)
+
+  Bootstrap judul (200x), JS genre CI95%: NA-EU [0.042, 0.073] | NA-JP [0.283, 0.329]  -> CI tidak tumpang-tindih (asimetri nyata)
+
+==============================================================================
+RQ2 -- Prediksi penjualan global dari atribut produk (tanpa kebocoran)
+==============================================================================
+  fitur: Year, Platform, Genre, Publisher (pooled)  -> 91 kolom setelah encoding
+  judul unik = 11,493 ; split = GroupKFold(5) per judul, statistik dari train saja
+
+  Model                                MAE            RMSE              R2
+  Baseline (mean)             0.591+/-0.030    1.506+/-0.382   -0.001+/-0.001
+  Baseline (median)           0.467+/-0.044    1.550+/-0.382   -0.064+/-0.014
+  Random Forest               0.493+/-0.036    1.430+/-0.326    0.087+/-0.042
+  HistGradientBoosting        0.494+/-0.034    1.402+/-0.349    0.129+/-0.042
+  HGB (MAE loss)              0.411+/-0.041    1.464+/-0.384    0.056+/-0.016
+  MLP (128-128)               0.513+/-0.023    1.395+/-0.370    0.145+/-0.020
+  (mean +/- SD antar 5 fold; setiap judul diuji tepat satu kali)
+
+  Demo kebocoran (HGB, metrik gabungan 16.598 prediksi OOF):
+    split acak + statistik global (gaya notebook) : MAE=0.500 RMSE=1.464 R2=+0.114
+    split per judul + statistik train saja         : MAE=0.495 RMSE=1.446 R2=+0.135
+    -> selisih R2 akibat kebocoran = -0.021
+
+  Model terbaik menurut R2 : MLP (128-128)
+  Model terbaik menurut MAE: HGB (MAE loss) (MAE=0.411) vs baseline median 0.467 -> model MENGALAHKAN baseline median
+
+  Permutation importance [MLP (128-128)] (R2 turun & MAE naik saat kelompok fitur diacak; rata-rata 5 fold):
+    Fitur                  dR2            dMAE    porsi
+    Publisher    0.2731+/-0.1081   0.1240+/-0.0117    61.2%
+    Platform     0.0903+/-0.0466   0.0534+/-0.0080    20.2%
+    Genre        0.0641+/-0.0416   0.0259+/-0.0043    14.4%
+    Year         0.0185+/-0.0146   0.0214+/-0.0126     4.1%
+
+  Permutation importance [HistGradientBoosting] (R2 turun & MAE naik saat kelompok fitur diacak; rata-rata 5 fold):
+    Fitur                  dR2            dMAE    porsi
+    Publisher    0.2024+/-0.0400   0.0839+/-0.0186    56.4%
+    Platform     0.0658+/-0.0305   0.0225+/-0.0123    18.3%
+    Genre        0.0570+/-0.0286   0.0156+/-0.0053    15.9%
+    Year         0.0333+/-0.0448   0.0244+/-0.0171     9.3%
+
+==============================================================================
+RQ3 -- Segmentasi K-Means dari pola penjualan regional (NA, EU, JP)
+==============================================================================
+  baris dipakai: 16,596 dari 16,598 (dibuang 2 baris yang NA+EU+JP = 0)
+  fitur: log(1+penjualan) NA/EU/JP, lalu standardisasi (penjualan sangat miring ke kanan)
+
+     k     inertia  silhouette  Davies-B  Calinski-H
+     2     29995.8       0.736     0.885       10949
+     3     22650.0       0.668     0.948        9940
+     4     17294.4       0.658     0.802       10391
+     5     13876.2       0.582     0.822       10734
+     6     12037.2       0.565     0.808       10406
+     7     10483.4       0.493     0.889       10366
+     8      9510.8       0.475     0.908       10036
+
+  elbow (jarak maks. ke garis ujung) : k=5
+  silhouette tertinggi               : k=2 (0.736); untuk k>=3: k=3 (0.668)
+  k yang dipakai                     : 3  (silhouette=0.668)  <- BUKAN optimum mutlak; k=2 hanya memisah 'terjual/hampir tidak'; dipilih agar segmen bisa diprofilkan
+  stabilitas (ARI vs 7 seed lain)    : 0.994
+
+  Profil segmen (rata-rata penjualan per judul-platform, juta; share = komposisi regional):
+               n  mean_global  median_global    NA    EU    JP    pct  NA_share%  EU_share%  JP_share%
+    Segmen                                                                                                
+    Low-Sales  14495         0.22           0.13  0.11  0.05  0.04  87.34      54.38      24.60      21.01
+    Mid-Tier    1772         2.15           1.58  1.16  0.71  0.06  10.68      59.86      36.81       3.33
+    Mega-Hit     329         5.71           3.19  2.26  1.37  1.70   1.98      42.42      25.67      31.91
+
+  Genre x Segmen: chi2 p=1.1e-110, Cramer's V=0.133  (V kecil=hubungan lemah; kategori jarang -> chi2 hanya indikatif)
+    Low-Sales : Adventure (8.6%, lift 1.1x); Strategy (4.5%, lift 1.1x); Puzzle (3.7%, lift 1.1x)
+    Mid-Tier  : Shooter (14.1%, lift 1.8x); Platform (7.8%, lift 1.5x); Racing (9.7%, lift 1.3x)
+    Mega-Hit  : Platform (16.7%, lift 3.1x); Role-Playing (27.1%, lift 3.0x); Puzzle (5.8%, lift 1.6x)
+
+  Platform x Segmen: chi2 p=0, Cramer's V=0.265  (V kecil=hubungan lemah; kategori jarang -> chi2 hanya indikatif)
+    Low-Sales : NG (0.1%, lift 1.1x); WS (0.0%, lift 1.1x); SAT (1.2%, lift 1.1x)
+    Mid-Tier  : GEN (0.6%, lift 3.8x); GB (1.4%, lift 2.3x); PS4 (4.3%, lift 2.1x)
+    Mega-Hit  : NES (14.0%, lift 23.7x); GB (8.2%, lift 13.9x); SNES (9.7%, lift 6.8x)
+
+  Contoh judul segmen tertinggi:
+                        Name Platform  Global_Sales
+                  Wii Sports      Wii         82.74
+           Super Mario Bros.      NES         40.24
+              Mario Kart Wii      Wii         35.82
+           Wii Sports Resort      Wii         33.00
+    Pokemon Red/Pokemon Blue       GB         31.37

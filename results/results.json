@@ -1,0 +1,471 @@
+{
+  "n_records": 16598,
+  "n_titles": 11493,
+  "genre_pointer_fixes": 2,
+  "rq1": {
+    "totals_M": {
+      "NA": 4392.95,
+      "EU": 2434.13,
+      "JP": 1291.02,
+      "Other": 797.75
+    },
+    "share_of_4_regions_pct": {
+      "NA": 49.27,
+      "EU": 27.3,
+      "JP": 14.48,
+      "Other": 8.95
+    },
+    "share_of_NA_EU_JP_pct": {
+      "NA": 54.11,
+      "EU": 29.98,
+      "JP": 15.9
+    },
+    "spearman": {
+      "NA_Sales": {
+        "NA_Sales": 1.0,
+        "EU_Sales": 0.681,
+        "JP_Sales": -0.229
+      },
+      "EU_Sales": {
+        "NA_Sales": 0.681,
+        "EU_Sales": 1.0,
+        "JP_Sales": -0.177
+      },
+      "JP_Sales": {
+        "NA_Sales": -0.229,
+        "EU_Sales": -0.177,
+        "JP_Sales": 1.0
+      }
+    },
+    "by_dimension": {
+      "Genre": {
+        "js": {
+          "NA-EU": 0.05,
+          "NA-JP": 0.301,
+          "EU-JP": 0.309
+        },
+        "top3": {
+          "NA": [
+            "Action (20.0%)",
+            "Sports (15.6%)",
+            "Shooter (13.3%)"
+          ],
+          "EU": [
+            "Action (21.6%)",
+            "Sports (15.5%)",
+            "Shooter (12.9%)"
+          ],
+          "JP": [
+            "Role-Playing (27.3%)",
+            "Action (12.4%)",
+            "Sports (10.5%)"
+          ]
+        }
+      },
+      "Platform": {
+        "js": {
+          "NA-EU": 0.184,
+          "NA-JP": 0.434,
+          "EU-JP": 0.463
+        },
+        "top3": {
+          "NA": [
+            "X360 (13.7%)",
+            "PS2 (13.3%)",
+            "Wii (11.6%)"
+          ],
+          "EU": [
+            "PS3 (14.1%)",
+            "PS2 (13.9%)",
+            "X360 (11.5%)"
+          ],
+          "JP": [
+            "DS (13.6%)",
+            "PS (10.8%)",
+            "PS2 (10.8%)"
+          ]
+        }
+      }
+    },
+    "genre_js_bootstrap_ci95": {
+      "NA-EU": [
+        0.042,
+        0.073
+      ],
+      "NA-JP": [
+        0.283,
+        0.329
+      ]
+    }
+  },
+  "rq2": {
+    "cv": {
+      "Baseline (mean)": {
+        "MAE": [
+          0.5908,
+          0.0299
+        ],
+        "RMSE": [
+          1.5057,
+          0.3823
+        ],
+        "R2": [
+          -0.001,
+          0.0009
+        ],
+        "pooled": {
+          "MAE": 0.5909,
+          "RMSE": 1.5554,
+          "R2": -0.0005
+        }
+      },
+      "Baseline (median)": {
+        "MAE": [
+          0.4668,
+          0.044
+        ],
+        "RMSE": [
+          1.5496,
+          0.3815
+        ],
+        "R2": [
+          -0.0636,
+          0.0141
+        ],
+        "pooled": {
+          "MAE": 0.4671,
+          "RMSE": 1.5978,
+          "R2": -0.0558
+        }
+      },
+      "Random Forest": {
+        "MAE": [
+          0.4927,
+          0.0357
+        ],
+        "RMSE": [
+          1.4302,
+          0.3263
+        ],
+        "R2": [
+          0.0867,
+          0.0421
+        ],
+        "pooled": {
+          "MAE": 0.4929,
+          "RMSE": 1.4686,
+          "R2": 0.1081
+        }
+      },
+      "HistGradientBoosting": {
+        "MAE": [
+          0.4944,
+          0.034
+        ],
+        "RMSE": [
+          1.402,
+          0.3486
+        ],
+        "R2": [
+          0.1287,
+          0.0422
+        ],
+        "pooled": {
+          "MAE": 0.4946,
+          "RMSE": 1.4464,
+          "R2": 0.1348
+        }
+      },
+      "HGB (MAE loss)": {
+        "MAE": [
+          0.4111,
+          0.0407
+        ],
+        "RMSE": [
+          1.4644,
+          0.384
+        ],
+        "R2": [
+          0.0561,
+          0.0159
+        ],
+        "pooled": {
+          "MAE": 0.4114,
+          "RMSE": 1.5158,
+          "R2": 0.0498
+        }
+      },
+      "MLP (128-128)": {
+        "MAE": [
+          0.5128,
+          0.0227
+        ],
+        "RMSE": [
+          1.3949,
+          0.3695
+        ],
+        "R2": [
+          0.1446,
+          0.0198
+        ],
+        "pooled": {
+          "MAE": 0.5129,
+          "RMSE": 1.4449,
+          "R2": 0.1366
+        }
+      }
+    },
+    "leakage_demo": {
+      "leaky_random_split_global_stats": {
+        "MAE": 0.5005,
+        "RMSE": 1.464,
+        "R2": 0.1136
+      },
+      "clean_grouped_train_only": {
+        "MAE": 0.4946,
+        "RMSE": 1.4464,
+        "R2": 0.1348
+      }
+    },
+    "best_model": "MLP (128-128)",
+    "best_model_mae": "HGB (MAE loss)",
+    "importance": {
+      "MLP (128-128)": {
+        "Publisher": {
+          "dR2": [
+            0.2731,
+            0.1081
+          ],
+          "dMAE": [
+            0.124,
+            0.0117
+          ],
+          "share_pct": 61.2
+        },
+        "Platform": {
+          "dR2": [
+            0.0903,
+            0.0466
+          ],
+          "dMAE": [
+            0.0534,
+            0.008
+          ],
+          "share_pct": 20.2
+        },
+        "Genre": {
+          "dR2": [
+            0.0641,
+            0.0416
+          ],
+          "dMAE": [
+            0.0259,
+            0.0043
+          ],
+          "share_pct": 14.4
+        },
+        "Year": {
+          "dR2": [
+            0.0185,
+            0.0146
+          ],
+          "dMAE": [
+            0.0214,
+            0.0126
+          ],
+          "share_pct": 4.1
+        }
+      },
+      "HistGradientBoosting": {
+        "Publisher": {
+          "dR2": [
+            0.2024,
+            0.04
+          ],
+          "dMAE": [
+            0.0839,
+            0.0186
+          ],
+          "share_pct": 56.4
+        },
+        "Platform": {
+          "dR2": [
+            0.0658,
+            0.0305
+          ],
+          "dMAE": [
+            0.0225,
+            0.0123
+          ],
+          "share_pct": 18.3
+        },
+        "Genre": {
+          "dR2": [
+            0.057,
+            0.0286
+          ],
+          "dMAE": [
+            0.0156,
+            0.0053
+          ],
+          "share_pct": 15.9
+        },
+        "Year": {
+          "dR2": [
+            0.0333,
+            0.0448
+          ],
+          "dMAE": [
+            0.0244,
+            0.0171
+          ],
+          "share_pct": 9.3
+        }
+      }
+    }
+  },
+  "rq3": {
+    "n_rows": 16596,
+    "k_table": [
+      {
+        "k": 2,
+        "inertia": 29995.849291031845,
+        "silhouette": 0.735536869641477,
+        "davies_bouldin": 0.884986241403937,
+        "calinski_harabasz": 10949.217473818098
+      },
+      {
+        "k": 3,
+        "inertia": 22650.02046637527,
+        "silhouette": 0.6677622604917487,
+        "davies_bouldin": 0.9479321095653322,
+        "calinski_harabasz": 9940.399282859571
+      },
+      {
+        "k": 4,
+        "inertia": 17294.393167020356,
+        "silhouette": 0.6580297511715908,
+        "davies_bouldin": 0.8022003299976675,
+        "calinski_harabasz": 10391.322068727843
+      },
+      {
+        "k": 5,
+        "inertia": 13876.191102746718,
+        "silhouette": 0.5824348478057322,
+        "davies_bouldin": 0.8220043174868834,
+        "calinski_harabasz": 10734.460546341079
+      },
+      {
+        "k": 6,
+        "inertia": 12037.24244315285,
+        "silhouette": 0.5650127594140858,
+        "davies_bouldin": 0.8082730503488186,
+        "calinski_harabasz": 10405.789711817622
+      },
+      {
+        "k": 7,
+        "inertia": 10483.35851270093,
+        "silhouette": 0.49261930494348327,
+        "davies_bouldin": 0.8890814360943402,
+        "calinski_harabasz": 10366.121055546097
+      },
+      {
+        "k": 8,
+        "inertia": 9510.756011346568,
+        "silhouette": 0.47481091765986727,
+        "davies_bouldin": 0.9075187391685342,
+        "calinski_harabasz": 10035.546197328671
+      }
+    ],
+    "elbow_k": 5,
+    "best_silhouette_k": 2,
+    "best_silhouette_k_ge3": 3,
+    "chosen_k": 3,
+    "stability_ARI_mean": 0.994,
+    "profile": [
+      {
+        "Segmen": "Low-Sales",
+        "n": 14495,
+        "mean_global": 0.223,
+        "median_global": 0.13,
+        "NA": 0.11,
+        "EU": 0.05,
+        "JP": 0.043,
+        "pct": 87.34,
+        "NA_share%": 54.384,
+        "EU_share%": 24.604,
+        "JP_share%": 21.013
+      },
+      {
+        "Segmen": "Mid-Tier",
+        "n": 1772,
+        "mean_global": 2.151,
+        "median_global": 1.58,
+        "NA": 1.157,
+        "EU": 0.712,
+        "JP": 0.064,
+        "pct": 10.677,
+        "NA_share%": 59.858,
+        "EU_share%": 36.81,
+        "JP_share%": 3.333
+      },
+      {
+        "Segmen": "Mega-Hit",
+        "n": 329,
+        "mean_global": 5.707,
+        "median_global": 3.19,
+        "NA": 2.259,
+        "EU": 1.367,
+        "JP": 1.699,
+        "pct": 1.982,
+        "NA_share%": 42.423,
+        "EU_share%": 25.667,
+        "JP_share%": 31.91
+      }
+    ],
+    "composition": {
+      "Genre": {
+        "chi2_p": 1.1459812299407426e-110,
+        "cramers_v": 0.133,
+        "top_lift": {
+          "Low-Sales": [
+            "Adventure (8.6%, lift 1.1x)",
+            "Strategy (4.5%, lift 1.1x)",
+            "Puzzle (3.7%, lift 1.1x)"
+          ],
+          "Mid-Tier": [
+            "Shooter (14.1%, lift 1.8x)",
+            "Platform (7.8%, lift 1.5x)",
+            "Racing (9.7%, lift 1.3x)"
+          ],
+          "Mega-Hit": [
+            "Platform (16.7%, lift 3.1x)",
+            "Role-Playing (27.1%, lift 3.0x)",
+            "Puzzle (5.8%, lift 1.6x)"
+          ]
+        }
+      },
+      "Platform": {
+        "chi2_p": 0.0,
+        "cramers_v": 0.265,
+        "top_lift": {
+          "Low-Sales": [
+            "NG (0.1%, lift 1.1x)",
+            "WS (0.0%, lift 1.1x)",
+            "SAT (1.2%, lift 1.1x)"
+          ],
+          "Mid-Tier": [
+            "GEN (0.6%, lift 3.8x)",
+            "GB (1.4%, lift 2.3x)",
+            "PS4 (4.3%, lift 2.1x)"
+          ],
+          "Mega-Hit": [
+            "NES (14.0%, lift 23.7x)",
+            "GB (8.2%, lift 13.9x)",
+            "SNES (9.7%, lift 6.8x)"
+          ]
+        }
+      }
+    }
+  }
+}
